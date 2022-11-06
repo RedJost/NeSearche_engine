@@ -13,12 +13,13 @@
 class ConverterJSON {
 
 
+
 public:
     ConverterJSON() = default;
 
     std::vector<std::string> GetTextDocuments();
 
-    int getResponsesLimit();
+    int GetResponsesLimit();
 
     std::vector<std::string> GetRequests();
 
