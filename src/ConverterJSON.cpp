@@ -16,15 +16,15 @@ std::vector<std::string> ConverterJSON::GetTextDocuments() {
             if (files != myJson.end()) {
                 std::string text = "";
                 for (auto it = files->begin(); it != files->end(); it++) {
-                    std::ifstream tempFile(*it); // ОПАСНАЯ СТРОЧКА
 
-                    std::string temp;
+                    std::ifstream tempFile(*it); // ОПАСНАЯ СТРОЧКА
+                    std::string temp = "";
                     while (!tempFile.eof()) {
                         std::getline(tempFile, temp);
                         text = text + temp + '\n';
                     } // ЧТЕНИЕ ФАЙЛА
-
                     result.push_back(text);
+                    text = "";
                     tempFile.close();
                 }
             } else {
@@ -127,5 +127,4 @@ void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> a
     }
     requestsFile << myJson;
     requestsFile.close();
-
 }

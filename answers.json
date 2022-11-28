@@ -1,1 +1,1 @@
-{"request1":{"relevance":{"docid1":23.0,"docid2":13.199999809265137,"docid3":0.4099999964237213},"result":"true"},"request2":{"result":"false"}}
+{"request1":{"relevance":{"docid1":232.0,"docid2":123.19999694824219,"docid3":20.40999984741211},"result":"true"},"request2":{"relevance":{"docid4":31.0},"result":"true"}}

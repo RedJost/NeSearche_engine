@@ -8,13 +8,12 @@
 #include <vector>
 #include <string>
 #include "allExceptions.h"
-#include <sstream>
+#include <unordered_set>
 
 class ConverterJSON {
 
-
-
 public:
+
     ConverterJSON() = default;
 
     std::vector<std::string> GetTextDocuments();
@@ -25,6 +24,11 @@ public:
 
     void putAnswers(std::vector<std::vector<std::pair<int,float>>> answers);
 };
+
+
+
+
+
 
 
 #endif //SEARCH_ENGINE_CONVERTERJSON_H

@@ -1,28 +1,28 @@
-#include "ConverterJSON.h"
+#include "SearchServer.h"
+
+//#include "gtest/gtest.h"
+
 
 int main() {
     setlocale(LC_ALL, "English");
-    std::vector<std::vector<std::pair<int,float>>> answers;
-    std::pair<int, float> a = {1, 23.0f};
-    std::pair<int, float> b = {2, 13.2f};
-    std::pair<int, float> c = {3, 0.41f};
-    std::pair<int, float> d = {4, 0.0f};
-    std::pair<int, float> e = {5, 0.0f};
-    std::pair<int, float> f = {6, 0.0f};
-    std::vector<std::pair<int,float>> lowVec1;
-    std::vector<std::pair<int,float>> lowVec2;
-    lowVec1.push_back(a);
-    lowVec1.push_back(b);
-    lowVec1.push_back(c);
-    lowVec2.push_back(d);
-    lowVec2.push_back(e);
-    lowVec2.push_back(f);
-    answers.push_back(lowVec1);
-    answers.push_back(lowVec2);
-
     ConverterJSON* myTransl = new ConverterJSON();
-    myTransl->putAnswers(answers);
+    InverterIndex* myIndex = new InverterIndex();
+    myIndex->UpdateDocumentsBase(myTransl->GetTextDocuments());
+    SearchServer* mySearch = new SearchServer(*myIndex);
+    mySearch->search(myTransl->GetRequests());
 
+
+    delete mySearch;
+    delete myIndex;
     delete myTransl;
     return 0;
 }
+
+
+//myIndex->UpdateDocumentsBase(myTransl->GetTextDocuments());
+//    for (auto it : myIndex->freqDictionary) {
+//        std::cout << it.first << " in " << std::endl;
+//        for (int i = 0; i < it.second.size(); i++) {
+//        std::cout << "["<< it.second[i].doc_id <<"]" << " has " << it.second[i].count << std::endl;
+//        }
+//}
