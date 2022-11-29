@@ -15,7 +15,7 @@ struct Entry {
 };
 
 class InverterIndex {
-public:
+private:
 
     std::map<std::string, std::vector<Entry>> freqDictionary;
     std::vector<std::string> docs;
@@ -27,6 +27,7 @@ public:
     void UpdateDocumentsBase(std::vector<std::string> inputDocs);
 
     std::vector<Entry> GetWordCount(const std::string& word);
+
 
 };
 
