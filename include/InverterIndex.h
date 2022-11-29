@@ -23,11 +23,8 @@ private:
 
 public:
     InverterIndex() = default;
-
     void UpdateDocumentsBase(std::vector<std::string> inputDocs);
-
     std::vector<Entry> GetWordCount(const std::string& word);
-
 
 };
 

@@ -18,8 +18,8 @@ void InverterIndex::UpdateDocumentsBase(std::vector<std::string> inputDocs) {
                 textTemp += (docs[i][k]);
             } else {
                 if (textTemp == "") continue;
-
                 if (k == docs[i].length() - 1) {
+
                     textTemp += (docs[i][k]);
                 }
 
@@ -58,5 +58,7 @@ std::vector<Entry> InverterIndex::GetWordCount(const std::string &word) {
     }
     return std::vector<Entry>();
 }
+
+
 
 
