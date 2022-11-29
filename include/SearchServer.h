@@ -13,9 +13,8 @@ struct RelativeIndex {
 
 
 class SearchServer {
-
+private:
     InverterIndex myIndex;
-
 
 public:
     SearchServer(InverterIndex& inIndex) : myIndex(inIndex){};
