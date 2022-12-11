@@ -1,26 +1,26 @@
-#include "InverterIndex.h"
+#include "InvertedIndex.h"
 
-void InverterIndex::UpdateDocumentsBase(std::vector<std::string> inputDocs) {
+void InvertedIndex::UpdateDocumentsBase(std::vector<std::string> inputDocs) {
     setlocale(LC_ALL, "English");
 
-    // ЗАПОЛНЕНИЕ docs ПОКА НЕ ОБНОВЛЯЕТ, А ПЕРЕЗАПИСЫВАЕТ
+    // FILLING OUT docs DOES NOT UPDATE YET, BUT OVERWRITES
     docs.resize(inputDocs.size());
     for (size_t i = 0; i < inputDocs.size(); i++) {
         docs[i] = inputDocs[i];
     }
-    // ЗАПОЛНЕНИЕ freqDictionary
-    for (size_t i = 0; i < docs.size(); i++) { // ПО ДОКУМЕНТАМ
+    // FILLING IN THE freqDictionary
+    for (size_t i = 0; i < docs.size(); i++) { // ACCORDING TO THE DOCUMENTS
         std::string textTemp = "";
-        for (size_t k = 0; k < docs[i].length(); k++) { // ПО СИМВОЛАМ В КАЖДОЙ СТРОКЕ-ДОКУМЕНТЕ
+        for (size_t k = 0; k < docs[i].length(); k++) { // BY CHARACTERS IN EACH LINE
             if ( ((docs[i][k] >= '0' && docs[i][k] <= '9') || (docs[i][k] >= 'A' && docs[i][k] <= 'Z')
             || (docs[i][k] >= 'a' && docs[i][k] <= 'z')
-            || (docs[i][k] == '\'')) && (k != docs[i].length() - 1)) {
+            || (docs[i][k] == '\'')) && (k != docs[i].length() - 1)) { // THE LAST CONDITION IS NECESSARY IN ORDER NOT TO SKIP THE LAST WORD, IT MAY TURN OUT THAT THE LAST CHARACTER BEFORE THE END OF THE LINE AND IT WILL NOT BE ADDED TO THE wordInDictionary
                 textTemp += (docs[i][k]);
             } else {
                 if (textTemp == "") continue;
-                if (k == docs[i].length() - 1) {
-
-                    textTemp += (docs[i][k]);
+                if ((k == docs[i].length() - 1)  && ((docs[i][k] >= '0' && docs[i][k] <= '9') || (docs[i][k] >= 'A' && docs[i][k] <= 'Z')
+                                                     || (docs[i][k] >= 'a' && docs[i][k] <= 'z'))) {
+                    textTemp += (docs[i][k]); // THIS CONDITION IS NECESSARY TO CHECK THE LAST CHARACTER - IT MUST BE A LETTER \ DIGIT SO THAT THERE IS A WORD
                 }
 
                 auto wordInDictionary = freqDictionary.find(textTemp);
@@ -51,7 +51,7 @@ void InverterIndex::UpdateDocumentsBase(std::vector<std::string> inputDocs) {
     }
 }
 
-std::vector<Entry> InverterIndex::GetWordCount(const std::string &word) {
+std::vector<Entry> InvertedIndex::GetWordCount(const std::string &word) {
     auto wordInDictionary = freqDictionary.find(word);
     if (wordInDictionary != freqDictionary.end()) {
         return wordInDictionary->second;

@@ -1,26 +1,15 @@
-
 #ifndef SEARCH_ENGINE_SEARCHSERVER_H
 #define SEARCH_ENGINE_SEARCHSERVER_H
-#include "InverterIndex.h"
 
-struct RelativeIndex {
-    size_t doc_id;
-    float rank;
-    bool operator == (const RelativeIndex& other) const {
-        return (doc_id == other.doc_id && rank == other.rank);
-    }
-};
-
+#include "InvertedIndex.h"
 
 class SearchServer {
 private:
-    InverterIndex myIndex;
-
+    InvertedIndex myIndex;
 public:
-    SearchServer(InverterIndex& inIndex) : myIndex(inIndex){};
+    SearchServer(InvertedIndex& inIndex) : myIndex(inIndex){};
 
     std::vector<std::vector<RelativeIndex>> search (const std::vector<std::string>& requests);
-
 };
 
 

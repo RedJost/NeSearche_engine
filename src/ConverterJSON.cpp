@@ -1,6 +1,5 @@
 #include "../include/ConverterJSON.h"
 
-
 std::vector<std::string> ConverterJSON::GetTextDocuments() {
     std::vector<std::string> result;
     std::ifstream configFile;
@@ -102,26 +101,22 @@ std::vector<std::string> ConverterJSON::GetRequests() {
     return result;
 }
 
-void ConverterJSON::putAnswers(std::vector<std::vector<std::pair<int, float>>> answers) {
+void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>> answers) {
     std::ofstream requestsFile ("..\\answers.json");
     nlohmann::json myJson;
-    int countRequest = 1;
-    for (auto it1 = answers.begin(); it1 != answers.end(); it1++, countRequest++) {
-        int countForResultOfSearch = 0;
-        for (auto it2 = it1->begin(); it2 != it1->end(); it2++) {
-            std::string nameRequest = "request" + std::to_string(countRequest);
-            if (it2->second == 0) {
-                countForResultOfSearch++;
-            } else {
-                std::string nameDoc = "docid" + std::to_string(it2->first);
-                myJson[nameRequest]["relevance"][nameDoc] = it2->second;
-            }
-            if (countForResultOfSearch == it1->size()) {
-                myJson[nameRequest]["result"] = "false";
-            } else {
+    size_t numberRequest = 1;
+    for (auto requestIt = answers.begin(); requestIt != answers.end(); requestIt++, numberRequest++) {
+        std::string nameRequest = "request" + std::to_string(numberRequest);
+        if (requestIt->empty()) {
+            myJson[nameRequest]["result"] = "false";
+            continue;
+        }
+        for (auto docsIt = requestIt->begin(); docsIt != requestIt->end(); docsIt++) {
+                if (docsIt->rank != 0) {
                 myJson[nameRequest]["result"] = "true";
+                std::string nameDoc = "docid" + std::to_string(docsIt->doc_id);
+                myJson[nameRequest]["relevance"][nameDoc] = docsIt->rank;
             }
-
         }
 
     }
