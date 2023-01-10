@@ -1,9 +1,6 @@
 #include "SearchServer.h"
-#include "gtest/gtest.h"
-
 
 int main() {
-
     setlocale(LC_ALL, "English");
     ConverterJSON* myTransl = new ConverterJSON();
     InvertedIndex* myIndex = new InvertedIndex();

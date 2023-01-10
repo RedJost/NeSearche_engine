@@ -1,8 +1,7 @@
 {
   "config": {
     "name": "NestSearchEngine",
-    "version": "0.1",
-    "max_responses": 5
+    "version": "0.1"
   },
   "files": [
     "../resources/file001.txt",

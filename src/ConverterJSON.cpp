@@ -1,51 +1,63 @@
 #include "../include/ConverterJSON.h"
 
 std::vector<std::string> ConverterJSON::GetTextDocuments() {
+
     std::vector<std::string> result;
     std::ifstream configFile;
-    configFile.exceptions(std::ios::failbit); // ИСКЛЮЧЕНИЕ НА ОТСТУТСВИЕ ФАЙЛА
+    configFile.open( "..\\config.json");
     try
     {
-        configFile.open( "..\\config.json");
-        nlohmann::json myJson;
-        configFile >> myJson;
-        auto configuration = myJson.find("config");
-        if (configuration != myJson.end()) {
-            auto files = myJson.find("files");
-            if (files != myJson.end()) {
-                std::string text = "";
-                for (auto it = files->begin(); it != files->end(); it++) {
-
-                    std::ifstream tempFile(*it); // ОПАСНАЯ СТРОЧКА
-                    std::string temp = "";
-                    while (!tempFile.eof()) {
-                        std::getline(tempFile, temp);
-                        text = text + temp + '\n';
-                    } // ЧТЕНИЕ ФАЙЛА
-                    result.push_back(text);
-                    text = "";
-                    tempFile.close();
+        if (configFile.is_open()) {
+            nlohmann::json myJson;
+            configFile >> myJson;
+            auto configuration = myJson.find("config");
+            if (configuration != myJson.end()) {
+                auto files = myJson.find("files");
+                if (files != myJson.end()) {
+                    std::string text = "";
+                    for (auto curFileName = files->begin(); curFileName != files->end(); curFileName++) {
+                        std::ifstream tempFile(*curFileName);
+                        if (tempFile.is_open()) {
+                            std::string temp = "";
+                            while (!tempFile.eof()) {
+                                std::getline(tempFile, temp);
+                                text = text + temp + '\n';
+                            }
+                            result.push_back(text);
+                            text = "";
+                            tempFile.close();
+                        } else {
+                            std::cout << "WARNING: " << *curFileName << " was not found in directory resources\n";
+                        }
+                    }
+                } else {
+                    throw FilesInConfigException();
                 }
             } else {
-                std::cout << "NOT FIND FILES\n";
-                //throw filesException();
+                throw configParameterException();
             }
+            configFile.close();
+
         } else {
-            std::cout << "NOT FIND CONFIG\n";
-            //throw configException();
+            throw configFileException();
         }
-        configFile.close();
+
     }
-    catch( std::ios_base::failure er)
+    catch(configFileException& er)
     {
-        std::cout << "Caught an exception (config file is missing): " << er.what() << std::endl;
+        std::cout << "Caught an exception: " << er.what() << std::endl;
+    }
+    catch (FilesInConfigException& er) {
+        std::cout << "Caught an exception: " << er.what() << std::endl;
+    }
+    catch (configParameterException& er) {
+        std::cout << "Caught an exception: " << er.what() << std::endl;
     }
     return result;
 }
 
 int ConverterJSON::GetResponsesLimit() {
     std::ifstream configFile;
-    configFile.exceptions(std::ios::failbit); // ИСКЛЮЧЕНИЕ НА ОТСТУТСВИЕ ФАЙЛА
     try
     {
         configFile.open( "..\\config.json");
@@ -58,18 +70,18 @@ int ConverterJSON::GetResponsesLimit() {
             if (limit != configuration->end()) {
                 return limit.value();
             } else {
-                std::cout << "NOT FIND LIMIT\n";
-                //throw limitException();
+                throw limitException();
             }
         } else {
-            std::cout << "NOT FIND CONFIG\n";
-            //throw configException();
+            throw configFileException();
         }
 
     }
-    catch( std::ios_base::failure er)
-    {
-        std::cout << "Caught an exception (config file is missing): " << er.what() << std::endl;
+    catch (configFileException& er) {
+        std::cout << "Caught an exception: " << er.what() << std::endl;
+    }
+    catch (limitException& er) {
+        std::cout << "Caught an exception: " << er.what() << std::endl;
     }
 
     return 0;
@@ -79,23 +91,27 @@ std::vector<std::string> ConverterJSON::GetRequests() {
     std::vector<std::string> result;
     std::ifstream requestsFile;
     requestsFile.open("..\\requests.json");
-    if (requestsFile.is_open()) {
-        nlohmann::json myJson;
-        requestsFile >> myJson;
-        auto requests = myJson.find("requests");
-        if (requests != myJson.end()) {
-            for (auto it = requests->begin(); it != requests->end(); it++) {
-                result.push_back(*it);
+    try {
+        if (requestsFile.is_open()) {
+            nlohmann::json myJson;
+            requestsFile >> myJson;
+            auto requests = myJson.find("requests");
+            if (requests != myJson.end()) {
+                for (auto it = requests->begin(); it != requests->end(); it++) {
+                    result.push_back(*it);
+                }
+            } else {
+                throw requestParameterException();
             }
-
         } else {
-            std::cout << "NOT FIND REQUESTS IN FILE\n";
-            //throw requestsException
+            throw requestFileException();
         }
-
-    } else {
-        std::cout << "NOT FIND REQUESTS FILE\n";
-        //throw requestsFileException
+    }
+    catch (requestParameterException& er) {
+        std::cout << "Caught an exception: " << er.what() << std::endl;
+    }
+    catch (requestFileException& er) {
+        std::cout << "Caught an exception: " << er.what() << std::endl;
     }
     requestsFile.close();
     return result;
@@ -116,10 +132,14 @@ void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>> answers) 
                 myJson[nameRequest]["result"] = "true";
                 std::string nameDoc = "docid" + std::to_string(docsIt->doc_id);
                 myJson[nameRequest]["relevance"][nameDoc] = docsIt->rank;
+
             }
+
         }
+
 
     }
     requestsFile << myJson;
+
     requestsFile.close();
 }

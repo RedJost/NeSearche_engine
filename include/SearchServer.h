@@ -7,9 +7,14 @@ class SearchServer {
 private:
     InvertedIndex myIndex;
 public:
+
     SearchServer(InvertedIndex& inIndex) : myIndex(inIndex){};
 
-    std::vector<std::vector<RelativeIndex>> search (const std::vector<std::string>& requests);
+    std::vector<RelativeIndex> searchOneRequest (const std::string& request);
+
+    std::vector<std::vector<RelativeIndex>> search (const std::vector<std::string>& requests); // allot unique words in const request and found their in freqDictionary of InvertedIndex\
+
+
 };
 
 
