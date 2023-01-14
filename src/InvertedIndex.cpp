@@ -59,6 +59,10 @@ std::vector<Entry> InvertedIndex::GetWordCount(const std::string &word) {
     return std::vector<Entry>();
 }
 
+int InvertedIndex::getCountDocOutput() {
+    return countDocOutput;
+}
+
 
 
 

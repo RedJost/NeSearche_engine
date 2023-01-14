@@ -127,6 +127,7 @@ void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>> answers) 
             myJson[nameRequest]["result"] = "false";
             continue;
         }
+
         for (auto docsIt = requestIt->begin(); docsIt != requestIt->end(); docsIt++) {
                 if (docsIt->rank != 0) {
                 myJson[nameRequest]["result"] = "true";
