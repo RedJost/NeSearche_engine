@@ -121,18 +121,18 @@ void ConverterJSON::putAnswers(std::vector<std::vector<RelativeIndex>> answers) 
     std::ofstream requestsFile ("..\\answers.json");
     nlohmann::json myJson;
     size_t numberRequest = 1;
-    for (auto requestIt = answers.begin(); requestIt != answers.end(); requestIt++, numberRequest++) {
+    for (int requestIndex = 0; requestIndex < answers.size(); requestIndex++, numberRequest++) {
         std::string nameRequest = "request" + std::to_string(numberRequest);
-        if (requestIt->empty()) {
+        if (answers[requestIndex].empty()) {
             myJson[nameRequest]["result"] = "false";
             continue;
         }
-
-        for (auto docsIt = requestIt->begin(); docsIt != requestIt->end(); docsIt++) {
-                if (docsIt->rank != 0) {
+        
+        for (int docIndex = 0; (docIndex < answers[requestIndex].size()) && (docIndex < GetResponsesLimit()); docIndex++) {
+                if (answers[requestIndex][docIndex].rank != 0) {
                 myJson[nameRequest]["result"] = "true";
-                std::string nameDoc = "docid" + std::to_string(docsIt->doc_id);
-                myJson[nameRequest]["relevance"][nameDoc] = docsIt->rank;
+                std::string nameDoc = "docid" + std::to_string(answers[requestIndex][docIndex].doc_id);
+                myJson[nameRequest]["relevance"][nameDoc] = answers[requestIndex][docIndex].rank;
 
             }
 

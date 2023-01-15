@@ -133,8 +133,6 @@ std::vector<std::vector<RelativeIndex>> SearchServer::search(const std::vector<s
             return (first.rank > second.rank);
         });
 
-        curRelativeVector.resize(myIndex.getCountDocOutput());
-
         result.push_back(curRelativeVector);
     }
     return result;

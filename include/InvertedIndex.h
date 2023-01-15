@@ -16,14 +16,9 @@ class InvertedIndex {
 private:
     std::map<std::string, std::vector<Entry>> freqDictionary;
     std::vector<std::string> docs;
-    int countDocOutput;
 public:
 
     InvertedIndex() = default;
-
-    InvertedIndex(int InCountDoc) : countDocOutput(InCountDoc){};
-
-    int getCountDocOutput();
 
     void UpdateDocumentsBase(std::vector<std::string> inputDocs); // update docs and freqDictionary, every word in docs write in freqDictionary, if word was wrote before, then count of this word increased
 
