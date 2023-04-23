@@ -76,7 +76,7 @@
      
   7.1) Скачать zip архив с исходным кодом (а ткаже с CMakeLists.txt)
      
-  7.2) Скачать библиотеку [nlohmann](https://github.com/nlohmann/json), ее линковка уже прописана в CMakeLists.txt
+  7.2) Скачать библиотеку [nlohmann](https://github.com/nlohmann/json), ее связь с проектом уже прописана в CMakeLists.txt
      
   7.3) Собрать проект. Это можно сделать через консоль (прописав команду cmake, указав директорию где находится CMakeLists.txt с определенными опциями по желанию) или через среду разработки. Я пользовался [Clion](https://www.jetbrains.com/clion/). Можно и в других, таких как [Visual Studio](https://code.visualstudio.com) 
   
